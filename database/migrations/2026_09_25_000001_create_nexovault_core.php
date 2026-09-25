@@ -1,0 +1,9 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up():void{
+ Schema::create('vault_settings',function(Blueprint $t){$t->id();$t->string('key')->unique();$t->longText('value');$t->timestamps();});
+ Schema::create('projects',function(Blueprint $t){$t->id();$t->string('name');$t->text('description')->nullable();$t->string('status')->default('IDEA');$t->unsignedTinyInteger('progress')->default(0);$t->string('client')->nullable();$t->string('technology')->nullable();$t->string('environment')->nullable();$t->text('next_step')->nullable();$t->longText('notes')->nullable();$t->timestamps();});
+ Schema::create('credentials',function(Blueprint $t){$t->id();$t->foreignId('project_id')->nullable()->constrained()->nullOnDelete();$t->string('label');$t->longText('username_enc')->nullable();$t->longText('password_enc');$t->text('url')->nullable();$t->string('category')->nullable();$t->longText('notes_enc')->nullable();$t->boolean('favorite')->default(false);$t->timestamps();});
+ Schema::create('resource_urls',function(Blueprint $t){$t->id();$t->foreignId('project_id')->nullable()->constrained()->nullOnDelete();$t->string('label');$t->text('url');$t->string('type')->default('OTRO');$t->text('notes')->nullable();$t->timestamps();});
+ Schema::create('plans',function(Blueprint $t){$t->id();$t->foreignId('project_id')->constrained()->cascadeOnDelete();$t->string('title');$t->string('type')->default('TAREA');$t->string('status')->default('PENDIENTE');$t->unsignedSmallInteger('weight')->default(1);$t->date('due_date')->nullable();$t->text('notes')->nullable();$t->timestamps();});
+ } public function down():void{Schema::dropIfExists('plans');Schema::dropIfExists('resource_urls');Schema::dropIfExists('credentials');Schema::dropIfExists('projects');Schema::dropIfExists('vault_settings');} };

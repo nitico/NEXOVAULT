@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Middleware; use Closure; use Illuminate\Http\Request; use App\Services\AuditService;
+class EnsureVaultUnlocked { public function handle(Request $request,Closure $next){if(!session()->has('vault_key'))return redirect()->route('vault.login')->withErrors(['master'=>'La bóveda está bloqueada.']);$timeout=(int)config('nexovault.idle_timeout',900);$last=(int)session('vault_last_activity',0);if($last&&time()-$last>$timeout){AuditService::log('VAULT_AUTO_LOCK','Bloqueo automático por inactividad.');$request->session()->invalidate();$request->session()->regenerateToken();return redirect()->route('vault.login')->withErrors(['master'=>'La bóveda se bloqueó por inactividad.']);}session(['vault_last_activity'=>time()]);return $next($request);} }

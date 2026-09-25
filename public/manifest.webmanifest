@@ -1,0 +1,12 @@
+{
+  "name": "NexoBarber",
+  "short_name": "NexoBarber",
+  "description": "Agenda, conecta y administra tu barbería.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f8f5",
+  "theme_color": "#06251c",
+  "lang": "es",
+  "categories": ["business", "lifestyle", "productivity"]
+}
